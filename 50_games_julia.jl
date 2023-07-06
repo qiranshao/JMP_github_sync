@@ -1283,7 +1283,7 @@ Random.seed!(10)
 ## 9.2 full model
 
 # 9.2.1 2:10000
-#tt=2
+tt=2
 
 
 @time for tt in 2:10000
