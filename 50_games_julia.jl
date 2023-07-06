@@ -600,13 +600,13 @@ m = Steam_model(A_game, A_friend, A_num_players, A_top_game_info, A_group, A_joi
 
 #print(m.top_game_info[Country_List[cc]])
 
-
-m.top_game_info[Country_List[3]][:,:Price] = m.top_game_info[Country_List[3]][:,:Price] ./ A_top_game_info[Country_List[cc]][:, :Min_Ram]
-
+for cc in 1:num_cc
+    m.top_game_info[Country_List[cc]][:,:Price] = m.top_game_info[Country_List[cc]][:,:Price] ./ A_top_game_info[Country_List[cc]][:, :Min_Ram]
+end
 
 
 #plot(m.top_game_info[Country_List[3]][:,:Price] ./A_top_game_info[Country_List[cc]][:, :Min_Ram])
-#plot(m.top_game_info[Country_List[3]][:,:Price])
+#plot(m.top_game_info[Country_List[10]][:,:Price])
 
 #plot(A_top_game_info[Country_List[cc]][:, :Max_Ram])
 #print(m.top_game_info[Country_List[3]])
