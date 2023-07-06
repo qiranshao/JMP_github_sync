@@ -235,7 +235,7 @@ for cc in 1: num_cc
     A_row_is_mul[Country_List[cc]] = readdlm("$(cc)_row_is_mul.txt")
 end
 
-for cc in 1: num_cc
+for cc in 1:num_cc
     println("cc = $cc")
     A_top_game_info[Country_List[cc]] = CSV.read("$(cc)_top_game_info.csv", DataFrame)
 end
@@ -601,7 +601,7 @@ m = Steam_model(A_game, A_friend, A_num_players, A_top_game_info, A_group, A_joi
 #print(m.top_game_info[Country_List[cc]])
 
 
-
+m.top_game_info[Country_List[3]][:,:Price] = m.top_game_info[Country_List[3]][:,:Price] ./ A_top_game_info[Country_List[cc]][:, :Min_Ram]
 
 
 
