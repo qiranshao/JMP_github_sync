@@ -234,12 +234,12 @@ for cc in 1: num_cc
     A_joint_play[Country_List[cc]] = readdlm("$(cc)_joint_play.txt")
     A_row_is_mul[Country_List[cc]] = readdlm("$(cc)_row_is_mul.txt")
 end
-
+#=
 for cc in 1:num_cc
     println("cc = $cc")
     A_top_game_info[Country_List[cc]] = CSV.read("$(cc)_top_game_info.csv", DataFrame)
 end
-
+=#
 ## 2.4.6 (archive) save in jls files
 # export these dictionary to local
 #using Serialization
@@ -600,6 +600,7 @@ m = Steam_model(A_game, A_friend, A_num_players, A_top_game_info, A_group, A_joi
 
 #print(m.top_game_info[Country_List[cc]])
 
+# normalize price by firm size
 for cc in 1:num_cc
     m.top_game_info[Country_List[cc]][:,:Price] = m.top_game_info[Country_List[cc]][:,:Price] ./ A_top_game_info[Country_List[cc]][:, :Min_Ram]
 end
