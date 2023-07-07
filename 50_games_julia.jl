@@ -1629,7 +1629,6 @@ tt=2
 end
 
 # check convergence pattern
-
 #quantile(β_MC[1:5000,3], 0.95)
 #quantile(β_MC[1:5000,3], 0.05)
 #quantile(α_MC[1:5000], 0.95)
