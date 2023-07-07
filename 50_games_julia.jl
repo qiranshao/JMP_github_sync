@@ -1629,14 +1629,14 @@ tt=2
 end
 
 # check convergence pattern
-#quantile(β_MC[1:5000,3], 0.95)
-#quantile(β_MC[1:5000,3], 0.05)
-#quantile(α_MC[1:5000], 0.95)
-#quantile(α_MC[1:5000], 0.05)
+quantile(β_MC[1:5000,3], 0.95)
+quantile(β_MC[1:5000,3], 0.025)
+quantile(α_MC[1:5000], 0.95)
+quantile(α_MC[1:5000], 0.05)
 plot(σ_ηξ_MC[1:1000])
 plot(α_MC[1:10000])
-plot(β_MC[1:10000,2])
-plot(ϕ_MC[1:10000,2])
+plot(β_MC[1:10000,3])
+plot(ϕ_MC[1:10000,1])
 
 
 ## save results
