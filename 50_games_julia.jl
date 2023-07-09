@@ -2052,6 +2052,7 @@ writedlm("η_MClast.txt", η_MC[20000,:,:], ',')
 ϕ_MC[10001:20000,:] = readdlm("ϕ_MC20000.txt", ',')
 γ_MC[10001:20000,:] = readdlm("γ_MC20000.txt", ',')
 
+ν_MC[20000] = Dict{String, Matrix{Float64}}()
 for cc in 1:num_cc
     ν_MC[20000][Country_List[cc]] = readdlm("$(cc)_ν_MClast.txt", ',')
 end
@@ -2412,7 +2413,7 @@ writedlm("ρ_MC30000.txt", ρ_MC[20001:30000,:], ',')
 writedlm("ϕ_MC30000.txt", ϕ_MC[20001:30000,:], ',')
 writedlm("γ_MC30000.txt", γ_MC[20001:30000,:], ',')
 
-for cc in num_cc
+for cc in 1:num_cc
     writedlm("$(cc)_ν_MClast.txt", ν_MC[30000][Country_List[cc]], ',')
 end
 
@@ -2431,6 +2432,7 @@ writedlm("η_MClast.txt", η_MC[30000,:,:], ',')
 ϕ_MC[20001:30000,:] = readdlm("ϕ_MC30000.txt", ',')
 γ_MC[20001:30000,:] = readdlm("γ_MC30000.txt", ',')
 
+ν_MC[30000] = Dict{String, Matrix{Float64}}()
 for cc in 1:num_cc
     ν_MC[30000][Country_List[cc]] = readdlm("$(cc)_ν_MClast.txt", ',')
 end
@@ -2811,6 +2813,7 @@ writedlm("η_MClast.txt", η_MC[40000,:,:], ',')
 ϕ_MC[30001:40000,:] = readdlm("ϕ_MC40000.txt", ',')
 γ_MC[30001:40000,:] = readdlm("γ_MC40000.txt", ',')
 
+ν_MC[40000] = Dict{String, Matrix{Float64}}()
 for cc in 1:num_cc
     ν_MC[40000][Country_List[cc]] = readdlm("$(cc)_ν_MClast.txt", ',')
 end
@@ -3190,6 +3193,7 @@ writedlm("η_MClast.txt", η_MC[50000,:,:], ',')
 ϕ_MC[40001:50000,:] = readdlm("ϕ_MC50000.txt", ',')
 γ_MC[40001:50000,:] = readdlm("γ_MC50000.txt", ',')
 
+ν_MC[50000] = Dict{String, Matrix{Float64}}()
 for cc in 1:num_cc
     ν_MC[50000][Country_List[cc]] = readdlm("$(cc)_ν_MClast.txt", ',')
 end
@@ -3570,6 +3574,7 @@ writedlm("η_MClast.txt", η_MC[60000,:,:], ',')
 ϕ_MC[50001:60000,:] = readdlm("ϕ_MC60000.txt", ',')
 γ_MC[50001:60000,:] = readdlm("γ_MC60000.txt", ',')
 
+ν_MC[60000] = Dict{String, Matrix{Float64}}()
 for cc in 1:num_cc
     ν_MC[60000][Country_List[cc]] = readdlm("$(cc)_ν_MClast.txt", ',')
 end
@@ -3949,6 +3954,7 @@ writedlm("η_MClast.txt", η_MC[70000,:,:], ',')
 ϕ_MC[60001:70000,:] = readdlm("ϕ_MC70000.txt", ',')
 γ_MC[60001:70000,:] = readdlm("γ_MC70000.txt", ',')
 
+ν_MC[70000] = Dict{String, Matrix{Float64}}()
 for cc in 1:num_cc
     ν_MC[70000][Country_List[cc]] = readdlm("$(cc)_ν_MClast.txt", ',')
 end
@@ -4328,6 +4334,7 @@ writedlm("η_MClast.txt", η_MC[80000,:,:], ',')
 ϕ_MC[70001:80000,:] = readdlm("ϕ_MC80000.txt", ',')
 γ_MC[70001:80000,:] = readdlm("γ_MC80000.txt", ',')
 
+ν_MC[80000] = Dict{String, Matrix{Float64}}()
 for cc in 1:num_cc
     ν_MC[80000][Country_List[cc]] = readdlm("$(cc)_ν_MClast.txt", ',')
 end
@@ -4707,6 +4714,7 @@ writedlm("η_MClast.txt", η_MC[90000,:,:], ',')
 ϕ_MC[90001:100000,:] = readdlm("ϕ_MC90000.txt", ',')
 γ_MC[90001:100000,:] = readdlm("γ_MC90000.txt", ',')
 
+ν_MC[90000] = Dict{String, Matrix{Float64}}()
 for cc in 1:num_cc
     ν_MC[90000][Country_List[cc]] = readdlm("$(cc)_ν_MClast.txt", ',')
 end
