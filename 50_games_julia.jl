@@ -1630,13 +1630,13 @@ end
 
 # check convergence pattern
 quantile(β_MC[1:5000,3], 0.95)
-quantile(β_MC[1:5000,3], 0.025)
+quantile(β_MC[20001:30000,3], 0.025)
 quantile(α_MC[1:5000], 0.95)
-quantile(α_MC[10001:20000], 0.025)
+quantile(α_MC[20001:30000], 0.005)
 plot(σ_ηξ_MC[1:1000])
-plot(α_MC[1:20000])
-plot(β_MC[1:20000,4])
-plot(ϕ_MC[1:10000,2])
+plot(α_MC[1:30000])
+plot(β_MC[1:30000,1])
+plot(ϕ_MC[1:30000,1])
 
 
 ## save results
