@@ -1630,12 +1630,12 @@ end
 
 # check convergence pattern
 quantile(β_MC[1:5000,3], 0.95)
-quantile(β_MC[20001:30000,3], 0.025)
+quantile(β_MC[30001:40000,3], 0.025)
 quantile(α_MC[1:5000], 0.95)
-quantile(α_MC[20001:30000], 0.005)
+quantile(α_MC[50001:60000], 0.05)
 plot(σ_ηξ_MC[1:1000])
-plot(α_MC[1:30000])
-plot(β_MC[1:30000,1])
+plot(α_MC[50001:60000])
+plot(β_MC[30001:40000,4])
 plot(ϕ_MC[1:30000,1])
 
 
@@ -3563,7 +3563,7 @@ writedlm("σ_ηξ_MC60000.txt", σ_ηξ_MC[50001:60000], ',')
 writedlm("η_MClast.txt", η_MC[60000,:,:], ',')
 
 
-# 9.2.7 60001:70000
+# 9.2.7-8 60001:80000
 # read previous iterations
 τ_η_MC[50001:60000] = readdlm("τ_η_MC60000.txt", ',')
 δ_MC[50001:60000,:] = readdlm("δ_MC60000.txt", ',')
@@ -3584,7 +3584,7 @@ end
 η_MC[60000,:,:] = readdlm("η_MClast.txt", ',')
 
 # Bayesian MCMC
-@time for tt in 60001:70000
+@time for tt in 60001:80000
     τ_η_MC_lag = τ_η_MC[tt-1] 
     δ_MC_lag = δ_MC[tt-1,:] 
     ω_MC_lag = ω_MC[tt-1,:] 
@@ -3926,23 +3926,23 @@ end
 end
 
 ## save results
-writedlm("τ_η_MC70000.txt", τ_η_MC[60001:70000], ',')
-writedlm("δ_MC70000.txt", δ_MC[60001:70000,:], ',')
-writedlm("ω_MC70000.txt", ω_MC[60001:70000,:], ',')
-writedlm("β_MC70000.txt", β_MC[60001:70000,:], ',')
-writedlm("α_MC70000.txt", α_MC[60001:70000], ',')
-writedlm("ρ_MC70000.txt", ρ_MC[60001:70000,:], ',')
-writedlm("ϕ_MC70000.txt", ϕ_MC[60001:70000,:], ',')
-writedlm("γ_MC70000.txt", γ_MC[60001:70000,:], ',')
+writedlm("τ_η_MC7000080000.txt", τ_η_MC[60001:80000], ',')
+writedlm("δ_MC7000080000.txt", δ_MC[60001:80000,:], ',')
+writedlm("ω_MC7000080000.txt", ω_MC[60001:80000,:], ',')
+writedlm("β_MC7000080000.txt", β_MC[60001:80000,:], ',')
+writedlm("α_MC7000080000.txt", α_MC[60001:80000], ',')
+writedlm("ρ_MC7000080000.txt", ρ_MC[60001:80000,:], ',')
+writedlm("ϕ_MC7000080000.txt", ϕ_MC[60001:80000,:], ',')
+writedlm("γ_MC7000080000.txt", γ_MC[60001:80000,:], ',')
 
 for cc in 1:num_cc
-    writedlm("$(cc)_ν_MClast.txt", ν_MC[70000][Country_List[cc]], ',')
+    writedlm("$(cc)_ν_MClast.txt", ν_MC[80000][Country_List[cc]], ',')
 end
 
-writedlm("ξ_MClast.txt", ξ_MC[70000,:,:], ',')
-writedlm("σ_ηξ_MC70000.txt", σ_ηξ_MC[60001:70000], ',')
-writedlm("η_MClast.txt", η_MC[70000,:,:], ',')
-
+writedlm("ξ_MClast.txt", ξ_MC[80000,:,:], ',')
+writedlm("σ_ηξ_MC70000.txt", σ_ηξ_MC[60001:80000], ',')
+writedlm("η_MClast.txt", η_MC[80000,:,:], ',')
+#=
 # 9.2.8 70001:80000
 # read previous iterations
 τ_η_MC[60001:70000] = readdlm("τ_η_MC70000.txt", ',')
@@ -4322,7 +4322,391 @@ end
 writedlm("ξ_MClast.txt", ξ_MC[80000,:,:], ',')
 writedlm("σ_ηξ_MC80000.txt", σ_ηξ_MC[70001:80000], ',')
 writedlm("η_MClast.txt", η_MC[80000,:,:], ',')
+=#
 
+
+# 9.2.9-10 80001:100000
+# read previous iterations
+τ_η_MC[60001:80000] = readdlm("τ_η_MC7000080000.txt", ',')
+δ_MC[60001:80000,:] = readdlm("δ_MC7000080000.txt", ',')
+ω_MC[60001:80000,:] = readdlm("ω_MC7000080000.txt", ',')
+β_MC[60001:80000,:] = readdlm("β_MC7000080000.txt", ',')
+α_MC[60001:80000] = readdlm("α_MC7000080000.txt", ',')
+ρ_MC[60001:80000,:] = readdlm("ρ_MC7000080000.txt", ',')
+ϕ_MC[60001:80000,:] = readdlm("ϕ_MC7000080000.txt", ',')
+γ_MC[60001:80000,:] = readdlm("γ_MC7000080000.txt", ',')
+
+ν_MC[80000] = Dict{String, Matrix{Float64}}()
+for cc in 1:num_cc
+    ν_MC[80000][Country_List[cc]] = readdlm("$(cc)_ν_MClast.txt", ',')
+end
+
+σ_ηξ_MC[60001:80000] = readdlm("σ_ηξ_MC7000080000.txt", ',')
+ξ_MC[80000,:,:] = readdlm("ξ_MClast.txt", ',')
+η_MC[80000,:,:] = readdlm("η_MClast.txt", ',')
+
+# Bayesian MCMC
+@time for tt in 80001:100000
+    τ_η_MC_lag = τ_η_MC[tt-1] 
+    δ_MC_lag = δ_MC[tt-1,:] 
+    ω_MC_lag = ω_MC[tt-1,:] 
+    β_MC_lag = β_MC[tt-1,:]
+    α_MC_lag = α_MC[tt-1]
+    ρ_MC_lag = ρ_MC[tt-1,:]
+    ϕ_MC_lag = ϕ_MC[tt-1,:]
+    γ_MC_lag = γ_MC[tt-1,:]
+    ν_MC_lag = ν_MC[tt-1]
+    ξ_MC_lag = ξ_MC[tt-1,:,:]
+    σ_ηξ_MC_lag = σ_ηξ_MC[tt-1]
+    η_MC_lag = η_MC[tt-1,:,:]
+
+    println("tt=$tt,")
+    ## 1
+    println("tt=$tt, step 1")
+    α_τ_η_post = α_τ_η + num_games * num_cc/2 + n_z/2
+    #
+    τ_η_MC_tt = (rand(Gamma(α_τ_η_post,
+                            (
+                                β_τ_η + sum(η_MC_lag .^2)/2 + (δ_MC_lag - μ_δ)' * inv(Σ_δ) * (δ_MC_lag - μ_δ)/2
+                            )^(-1)
+                        ))
+                )
+    ## 2
+    println("tt=$tt, step 2")
+    δ_MC_tt = (rand(Distributions.MvNormal(inv_Q_δ_l_δ, Matrix(Hermitian(τ_η_MC_tt^(-1) * inv_Q_δ)))
+                      )
+                )
+    η_MC_tt = reshape(price - IV * δ_MC_tt, (num_games,num_cc))'
+    #η_MC_tt = reshape(price, (num_games,num_cc))'
+    ## 3
+    println("tt=$tt, step 3")
+    # (a) propose tilde from random walk
+    ω̃ = ω_MC_lag + rand(Distributions.MvNormal(proposal_mean_ω, proposal_var_ω)) # multiply μ_ω, make less variation
+    β̃ = ω̃[1:k]
+    α̃ = ω̃[k+1]
+    
+    A_R = Dict{Int64, Dict{Int64, Matrix{Float64}}}() # first Int64: country, Int64: partition key
+    A_R_cc_temp =  Dict{Int64, Matrix{Float64}}()
+
+    for cc in 1:num_cc
+        for key in collect(keys(m.partition_index[Country_List[cc]]))[1:n_par]
+            #println("$cc, $key")
+            A_R_cc_temp[key] =  MC_A(R,cc, key, m, β̃, α̃, ρ_MC_lag,  ν_MC_lag, ϕ_MC_lag, ξ_MC_lag)   
+        end
+        A_R[cc] = copy(A_R_cc_temp)
+    end
+
+   
+    # for P() terms in 3(b)
+    for cc in 1:num_cc
+        np = 0
+        for key in collect(keys(m.partition_index[Country_List[cc]]))[1:n_par]
+            #println("$cc, $key")
+            np += 1
+            u_sum_A_tilde[cc,np] = gen_A_utility_sum(cc, key, m, β̃, α̃, ρ_MC_lag, ν_MC_lag, ϕ_MC_lag, ξ_MC_lag)
+            u_sum_A_R_lag[cc,np] = gen_A_R_utility_sum(cc, key, A_R[cc][key], m, β_MC_lag, α_MC_lag, ρ_MC_lag, ν_MC_lag, ϕ_MC_lag, ξ_MC_lag)
+            u_sum_A_lag[cc,np] = gen_A_utility_sum(cc, key, m, β_MC_lag, α_MC_lag, ρ_MC_lag, ν_MC_lag, ϕ_MC_lag, ξ_MC_lag)
+            u_sum_A_R_tilde[cc,np] = gen_A_R_utility_sum(cc, key, A_R[cc][key], m, β̃, α̃, ρ_MC_lag, ν_MC_lag, ϕ_MC_lag, ξ_MC_lag)
+        end
+    end
+
+    # for N() terms in 3(b)
+    pdf_tilde = pdf(Distributions.MvNormal(μ_ω, Σ_ω), ω̃)
+    pdf_lag = pdf(Distributions.MvNormal(μ_ω, Σ_ω), ω_MC_lag)
+    a_bar = (
+            log(pdf_tilde) + sum(u_sum_A_tilde) + sum(u_sum_A_R_lag)
+            -
+            (log(pdf_lag) + sum(u_sum_A_lag) + sum(u_sum_A_R_tilde))
+            )
+    a_rate = log(rand(1)[1])
+    if a_rate < a_bar
+        ω_MC_tt = ω̃
+        β_MC_tt = ω_MC_tt[1:k]
+        α_MC_tt = ω_MC_tt[k+1]
+    else
+        ω_MC_tt = copy(ω_MC_lag)
+        β_MC_tt = ω_MC_tt[1:k]
+        α_MC_tt = ω_MC_tt[k+1]
+    end
+    ## 4
+    println("tt=$tt, step 4")
+    # (a) propose tilde from random walk
+    ρ̃ = ρ_MC_lag + rand(Distributions.MvNormal(proposal_mean_ρ, proposal_var_ρ)) # multiply μ_ρ, make less variation
+
+    A_R = Dict{Int64, Dict{Int64, Matrix{Float64}}}() # first Int64: country, Int64: partition key
+    A_R_cc_temp =  Dict{Int64, Matrix{Float64}}()
+
+    for cc in 1:num_cc
+        for key in collect(keys(m.partition_index[Country_List[cc]]))[1:n_par]
+            #println("$cc, $key")
+            A_R_cc_temp[key] =  MC_A(R,cc, key, m, β_MC_tt, α_MC_tt, ρ̃,  ν_MC_lag, ϕ_MC_lag, ξ_MC_lag)   
+        end
+        A_R[cc] = copy(A_R_cc_temp)
+    end
+
+
+       # for P() terms in 3(b)
+    for cc in 1:num_cc
+        np = 0
+        for key in collect(keys(m.partition_index[Country_List[cc]]))[1:n_par]
+            #println("$cc, $key")
+            np += 1
+            u_sum_A_tilde[cc,np] = gen_A_utility_sum(cc, key, m, β_MC_tt, α_MC_tt, ρ̃, ν_MC_lag, ϕ_MC_lag, ξ_MC_lag)
+            u_sum_A_R_lag[cc,np] = gen_A_R_utility_sum(cc, key, A_R[cc][key], m,  β_MC_tt, α_MC_tt, ρ_MC_lag, ν_MC_lag, ϕ_MC_lag, ξ_MC_lag)
+            u_sum_A_lag[cc,np] = gen_A_utility_sum(cc, key, m, β_MC_tt, α_MC_tt, ρ_MC_lag, ν_MC_lag, ϕ_MC_lag, ξ_MC_lag)
+            u_sum_A_R_tilde[cc,np] = gen_A_R_utility_sum(cc, key, A_R[cc][key], m, β_MC_tt, α_MC_tt, ρ̃, ν_MC_lag, ϕ_MC_lag, ξ_MC_lag)
+        end
+    end
+  # for N() terms in 3(b)
+    pdf_tilde = pdf(Distributions.MvNormal(μ_ρ, Σ_ρ), ρ̃)
+    pdf_lag = pdf(Distributions.MvNormal(μ_ρ, Σ_ρ), ρ_MC_lag)
+    a_bar = (
+            log(pdf_tilde) + sum(u_sum_A_tilde) + sum(u_sum_A_R_lag)
+            -
+            (log(pdf_lag) + sum(u_sum_A_lag) + sum(u_sum_A_R_tilde))
+            )
+    a_rate = log(rand(1)[1])
+    if a_rate < a_bar
+        ρ_MC_tt = ρ̃
+    else
+        ρ_MC_tt = copy(ρ_MC_lag)
+    end
+
+    ## 5
+    println("tt=$tt, step 5")
+    # (a) propose tilde from random walk
+    ϕ̃ = ϕ_MC_lag + rand(Distributions.MvNormal(proposal_mean_ϕ, proposal_var_ϕ)) # multiply μ_ϕ, make less variation
+    
+    
+    A_R = Dict{Int64, Dict{Int64, Matrix{Float64}}}() # first Int64: country, Int64: partition key
+    A_R_cc_temp =  Dict{Int64, Matrix{Float64}}()
+
+    for cc in 1:num_cc
+        for key in collect(keys(m.partition_index[Country_List[cc]]))[1:n_par]
+            #println("$cc, $key")
+            A_R_cc_temp[key] =  MC_A(R,cc, key, m, β_MC_tt, α_MC_tt, ρ_MC_tt,  ν_MC_lag, ϕ̃, ξ_MC_lag)   
+        end
+        A_R[cc] = copy(A_R_cc_temp)
+    end
+    
+      # for P() terms in 3(b)
+    for cc in 1:num_cc
+        np = 0
+        for key in collect(keys(m.partition_index[Country_List[cc]]))[1:n_par]
+            #println("$cc, $key")
+            np += 1
+            u_sum_A_tilde[cc,np] = gen_A_utility_sum(cc, key, m, β_MC_tt, α_MC_tt, ρ_MC_tt, ν_MC_lag, ϕ̃, ξ_MC_lag)
+            u_sum_A_R_lag[cc,np] = gen_A_R_utility_sum(cc, key, A_R[cc][key], m,  β_MC_tt, α_MC_tt, ρ_MC_tt, ν_MC_lag, ϕ_MC_lag, ξ_MC_lag)
+            u_sum_A_lag[cc,np] = gen_A_utility_sum(cc, key, m, β_MC_tt, α_MC_tt, ρ_MC_tt, ν_MC_lag, ϕ_MC_lag, ξ_MC_lag)
+            u_sum_A_R_tilde[cc,np] = gen_A_R_utility_sum(cc, key, A_R[cc][key], m, β_MC_tt, α_MC_tt, ρ_MC_tt, ν_MC_lag, ϕ̃, ξ_MC_lag)
+        end
+    end    
+     # for N() terms in 3(b)
+    pdf_tilde = pdf(Distributions.MvNormal(μ_ϕ, Σ_ϕ), ϕ̃)
+    pdf_lag = pdf(Distributions.MvNormal(μ_ϕ, Σ_ϕ), ϕ_MC_lag)
+    a_bar = (
+            log(pdf_tilde) + sum(u_sum_A_tilde) + sum(u_sum_A_R_lag)
+            -
+            (log(pdf_lag) + sum(u_sum_A_lag) + sum(u_sum_A_R_tilde))
+            )
+    a_rate = log(rand(1)[1])
+    if a_rate < a_bar
+        ϕ_MC_tt = ϕ̃
+    else
+        ϕ_MC_tt = copy(ϕ_MC_lag)
+    end
+
+    ## 6
+    println("tt=$tt, step 6")
+    ##(a)
+    γ̃ = γ_MC_lag + rand(Distributions.MvNormal(proposal_mean_γ, proposal_var_γ)) # multiply μ_γ, make less variation
+    ##(b)
+    ## for N() terms in 3(b)
+    pdf_tilde = pdf(Distributions.MvNormal(μ_γ, Σ_γ), γ̃)
+    pdf_lag = pdf(Distributions.MvNormal(μ_γ, Σ_γ), γ_MC_lag)
+
+    for cc in 1:num_cc
+        np = 0
+        for key in collect(keys(m.partition_index[Country_List[cc]]))[1:n_par]
+            np += 1
+            μ_log_sum_tilde[cc,np] =  gen_μ_log_sum(cc, key, m,  γ̃,ν_MC_lag)
+            μ_log_sum_lag[cc,np] =  gen_μ_log_sum(cc, key, m, γ_MC_lag,ν_MC_lag)
+        end
+    end
+   
+    a_bar = (
+            log(pdf_tilde) + sum(μ_log_sum_tilde)
+            -
+            (log(pdf_lag) + sum(μ_log_sum_lag))
+            )
+    a_rate = log(rand(1)[1])
+    if a_rate < a_bar
+        γ_MC_tt = γ̃
+    else
+        γ_MC_tt = copy(γ_MC_lag)
+    end
+    ## 7
+    
+    println("tt=$tt, step 7")
+    ν_temp = ν_MC_lag # inital value
+    A_R = Dict{Int64, Dict{Int64, Matrix{Float64}}}() # first Int64: country, Int64: partition key
+    A_R_cc_temp =  Dict{Int64, Matrix{Float64}}()
+    for cc in 1:num_cc
+        for key in collect(keys(m.partition_index[Country_List[cc]]))[1:n_par]
+            player_rows = m.partition_index[Country_List[cc]][key]
+            cc_key_num_player = length(player_rows)
+            for ii in 1:cc_key_num_player
+                # (a) propose tilde from random walk
+                ν̃ = deepcopy(ν_MC_lag)
+                ν_temp_ii = ν_MC_lag[Country_List[cc]][player_rows[ii],:]
+                ν̃_ii =  ν_temp_ii + rand(Normal(0,1),num_rc)
+                ν̃[Country_List[cc]][player_rows[ii],:] = ν̃_ii 
+                # (b) Sim A_m^R
+                A_R =  MC_A(R,cc, key, m, β_MC_tt, α_MC_tt, ρ_MC_tt, ν̃, ϕ_MC_tt, ξ_MC_lag)   
+                # (c) for P() terms in (c)
+                u_sum_A_tilde_7 = gen_A_utility_sum(cc, key, m, β_MC_tt, α_MC_tt, ρ_MC_tt, ν̃, ϕ_MC_tt, ξ_MC_lag)
+                u_sum_A_R_lag_7 = gen_A_R_utility_sum(cc, key, A_R, m,  β_MC_tt, α_MC_tt, ρ_MC_tt, ν_MC_lag, ϕ_MC_tt, ξ_MC_lag)
+                u_sum_A_lag_7 = gen_A_utility_sum(cc, key, m, β_MC_tt, α_MC_tt, ρ_MC_tt, ν_MC_lag, ϕ_MC_tt, ξ_MC_lag)
+                u_sum_A_R_tilde_7 = gen_A_R_utility_sum(cc, key, A_R, m, β_MC_tt, α_MC_tt, ρ_MC_tt, ν̃, ϕ_MC_tt, ξ_MC_lag)
+                # for N() terms in (c)
+                pdf_tilde = prod(pdf(Normal(0,1), ν̃_ii[pp]) for pp in 1:num_rc)
+                pdf_lag = prod(pdf(Normal(0,1), ν_temp_ii[pp]) for pp in 1:num_rc)
+                # for μ terms in (c)
+                μ_log_sum_tilde_7 =  gen_μ_log_sum(cc, key, m,  γ_MC_tt,ν̃)
+                μ_log_sum_lag_7 =  gen_μ_log_sum(cc, key, m, γ_MC_tt,ν_MC_lag)
+                a_bar = (
+                    log(pdf_tilde) + u_sum_A_tilde_7 + u_sum_A_R_lag_7 + μ_log_sum_tilde_7
+                    -
+                    (log(pdf_lag) + u_sum_A_lag_7 + u_sum_A_R_tilde_7 + μ_log_sum_lag_7)
+                    )
+                a_rate = log(rand(1)[1])
+                if a_rate < a_bar # accept new ν_ii
+                    ν_MC_lag[Country_List[cc]][player_rows[ii],:] = deepcopy(ν̃_ii)
+                end
+            end
+        end
+    end
+    ν_MC_tt = deepcopy(ν_MC_lag)
+
+
+    ## 8
+    println("tt=$tt, step 8")
+    #(a)
+    σ̃_ηξ = rand(TruncatedNormal(σ_ηξ_MC_lag,0.5, - τ_η_MC_tt^(-1/2),  τ_η_MC_tt^(-1/2))) # control  σ̃_ηξ so that it is in the defined range 
+
+    #σ̃_ηξ = rand(TruncatedNormal(σ_ηξ_MC_lag,0.5, max(- τ_η_MC_tt^(-1/2), - τ_η_MC_lag^(-1/2)),  min(τ_η_MC_tt^(-1/2), τ_η_MC_lag^(-1/2)))) # control  σ̃_ηξ so that it is in the defined range 
+    #(b)
+    # for N() terms in 3(b)
+    pdf_trunc_tilde = pdf(TruncatedNormal(μ_σ_ηξ, Σ_σ_ηξ, (- τ_η_MC_tt^(-1/2)),  τ_η_MC_tt^(-1/2)), σ̃_ηξ)
+    pdf_trunc_lag = pdf(TruncatedNormal(μ_σ_ηξ, Σ_σ_ηξ, (- τ_η_MC_tt^(-1/2)),  τ_η_MC_tt^(-1/2)), σ_ηξ_MC_lag)
+    for cc in 1:num_cc
+        for bb in 1:num_games
+            mean_N_tilde = σ̃_ηξ  * τ_η_MC_tt * η_MC_tt[cc,bb]
+            std_N_tilde = (1 - σ̃_ηξ^2 *  τ_η_MC_tt)^(1/2)
+            pdf_N_tilde[cc,bb] = pdf(Normal(mean_N_tilde, std_N_tilde) , ξ_MC_lag[cc,bb])
+            mean_N_lag = σ_ηξ_MC_lag  * τ_η_MC_tt * η_MC_tt[cc,bb]
+            if (1 - σ_ηξ_MC_lag^2 *  τ_η_MC_tt >= 0.0)
+                std_N_lag = (1 - σ_ηξ_MC_lag^2 *  τ_η_MC_tt)^(1/2)
+                pdf_N_lag[cc,bb] = pdf(Normal(mean_N_lag, std_N_lag) , ξ_MC_lag[cc,bb])
+            else
+                pdf_N_lag[cc,bb] = 1.0 # normalize when σ_ηξ_MC_lag is out of boundary
+            end
+        end
+    end
+    q_tilde_lag = pdf(TruncatedNormal(σ_ηξ_MC_lag, 0.5, (- τ_η_MC_tt^(-1/2)),  τ_η_MC_tt^(-1/2)), σ̃_ηξ)
+    q_lag_tilde = pdf(TruncatedNormal(σ̃_ηξ, 0.5, (- τ_η_MC_tt^(-1/2)),  τ_η_MC_tt^(-1/2)), σ_ηξ_MC_lag)
+
+    a_bar = (
+                log(pdf_trunc_tilde) + sum(log.(pdf_N_tilde)) + log(q_tilde_lag)
+                -
+                 (log(pdf_trunc_lag) + sum(log.(pdf_N_lag)) + log(q_lag_tilde))
+            )
+    a_rate = log(rand(1)[1])
+    if a_rate < a_bar
+        σ_ηξ_MC_tt = σ̃_ηξ
+    else
+        σ_ηξ_MC_tt = copy(σ_ηξ_MC_lag)
+    end
+    #σ_ηξ_MC_tt = 1.0
+    ## 9 ξ
+    println("tt=$tt, step 9")
+    ξ_temp = ξ_MC_lag # inital value
+
+    A_R = Dict{Int64, Dict{Int64, Matrix{Float64}}}() # first Int64: country, Int64: partition key
+    A_R_cc_temp =  Dict{Int64, Matrix{Float64}}()
+
+    for cc in 1:num_cc
+        for key in collect(keys(m.partition_index[Country_List[cc]]))[1:n_par]
+            player_rows = m.partition_index[Country_List[cc]][key]
+            cc_key_num_player = length(player_rows)
+            for bb in 1:num_games
+                # (a) propose tilde from random walk
+                ξ̃ = copy(ξ_MC_lag) 
+                ξ_temp_bb = ξ_MC_lag[cc, bb]
+                ξ̃_bb =  ξ_temp_bb + rand(Normal(0,1))
+                ξ̃[cc,bb] = ξ̃_bb 
+                # (b) Sim A_m^R
+                A_R =  MC_A(R,cc, key, m, β_MC_tt, α_MC_tt, ρ_MC_tt, ν_MC_tt, ϕ_MC_tt, ξ̃)   
+                # (c) for P() terms in (c)
+                u_sum_A_tilde_9 = gen_A_utility_sum(cc, key, m, β_MC_tt, α_MC_tt, ρ_MC_tt, ν_MC_tt, ϕ_MC_tt, ξ̃)
+                u_sum_A_R_lag_9 = gen_A_R_utility_sum(cc, key, A_R, m,  β_MC_tt, α_MC_tt, ρ_MC_tt, ν_MC_tt, ϕ_MC_tt, ξ_MC_lag)
+                u_sum_A_lag_9 = gen_A_utility_sum(cc, key, m, β_MC_tt, α_MC_tt, ρ_MC_tt, ν_MC_lag, ϕ_MC_tt, ξ_MC_lag)
+                u_sum_A_R_tilde_9 = gen_A_R_utility_sum(cc, key, A_R, m, β_MC_tt, α_MC_tt, ρ_MC_tt, ν_MC_tt, ϕ_MC_tt, ξ̃)
+                # for N() terms in (c) 
+                #pdf_tilde = pdf(Normal(0,1), ξ̃_bb) 
+                #pdf_lag = pdf(Normal(0,1), ξ_temp_bb)
+
+                pdf_tilde = pdf(Normal(σ_ηξ_MC_tt * τ_η_MC_tt * η_MC_tt[cc,bb],sqrt(abs(1- σ_ηξ_MC_tt^2 * τ_η_MC_tt))), ξ̃_bb) 
+                pdf_lag = pdf(Normal(σ_ηξ_MC_tt * τ_η_MC_tt * η_MC_tt[cc,bb],sqrt(abs(1- σ_ηξ_MC_tt^2 * τ_η_MC_tt) )), ξ_temp_bb) 
+
+                a_bar = (
+                    log(pdf_tilde) + u_sum_A_tilde_9 + u_sum_A_R_lag_9
+                    -
+                    (log(pdf_lag) + u_sum_A_lag_9 + u_sum_A_R_tilde_9)
+                    )
+                a_rate = log(rand(1)[1])
+                if a_rate < a_bar # accept new ν_ii
+                    ξ_MC_lag[cc,bb] = copy(ξ̃_bb)
+                end
+            end
+        end
+    end
+    ξ_MC_tt = copy(ξ_MC_lag)
+
+    τ_η_MC[tt] = τ_η_MC_tt
+    δ_MC[tt,:] = δ_MC_tt
+    ω_MC[tt,:] = ω_MC_tt
+    β_MC[tt,:] = β_MC_tt
+    α_MC[tt] = α_MC_tt
+    ρ_MC[tt,:] = ρ_MC_tt
+    ϕ_MC[tt,:] = ϕ_MC_tt
+    γ_MC[tt,:] = γ_MC_tt
+    ν_MC[tt] = ν_MC_tt
+    ξ_MC[tt,:,:] = ξ_MC_tt
+    σ_ηξ_MC[tt] = σ_ηξ_MC_tt
+    η_MC[tt,:,:] = η_MC_tt
+end
+
+## save results
+writedlm("τ_η_MC90000100000.txt", τ_η_MC[80001:100000], ',')
+writedlm("δ_MC90000100000.txt", δ_MC[80001:100000,:], ',')
+writedlm("ω_MC90000100000.txt", ω_MC[80001:100000,:], ',')
+writedlm("β_MC90000100000.txt", β_MC[80001:100000,:], ',')
+writedlm("α_MC90000100000.txt", α_MC[80001:100000], ',')
+writedlm("ρ_MC90000100000.txt", ρ_MC[80001:100000,:], ',')
+writedlm("ϕ_MC90000100000.txt", ϕ_MC[80001:100000,:], ',')
+writedlm("γ_MC90000100000.txt", γ_MC[80001:100000,:], ',')
+
+for cc in 1:num_cc
+    writedlm("$(cc)_ν_MClast.txt", ν_MC[100000][Country_List[cc]], ',')
+end
+
+writedlm("ξ_MClast.txt", ξ_MC[100000,:,:], ',')
+writedlm("σ_ηξ_MC90000.txt", σ_ηξ_MC[80001:100000], ',')
+writedlm("η_MClast.txt", η_MC[100000,:,:], ',')
+
+
+## alternatives
 # 9.2.9 80001:90000
 # read previous iterations
 τ_η_MC[70001:80000] = readdlm("τ_η_MC80000.txt", ',')
