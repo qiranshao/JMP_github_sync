@@ -3563,7 +3563,7 @@ writedlm("σ_ηξ_MC60000.txt", σ_ηξ_MC[50001:60000], ',')
 writedlm("η_MClast.txt", η_MC[60000,:,:], ',')
 
 
-# 9.2.7-8 60001:80000
+# 9.2.7 60001:70000
 # read previous iterations
 τ_η_MC[50001:60000] = readdlm("τ_η_MC60000.txt", ',')
 δ_MC[50001:60000,:] = readdlm("δ_MC60000.txt", ',')
@@ -3584,7 +3584,7 @@ end
 η_MC[60000,:,:] = readdlm("η_MClast.txt", ',')
 
 # Bayesian MCMC
-@time for tt in 60001:80000
+@time for tt in 60001:70000
     τ_η_MC_lag = τ_η_MC[tt-1] 
     δ_MC_lag = δ_MC[tt-1,:] 
     ω_MC_lag = ω_MC[tt-1,:] 
@@ -3926,23 +3926,23 @@ end
 end
 
 ## save results
-writedlm("τ_η_MC7000080000.txt", τ_η_MC[60001:80000], ',')
-writedlm("δ_MC7000080000.txt", δ_MC[60001:80000,:], ',')
-writedlm("ω_MC7000080000.txt", ω_MC[60001:80000,:], ',')
-writedlm("β_MC7000080000.txt", β_MC[60001:80000,:], ',')
-writedlm("α_MC7000080000.txt", α_MC[60001:80000], ',')
-writedlm("ρ_MC7000080000.txt", ρ_MC[60001:80000,:], ',')
-writedlm("ϕ_MC7000080000.txt", ϕ_MC[60001:80000,:], ',')
-writedlm("γ_MC7000080000.txt", γ_MC[60001:80000,:], ',')
+writedlm("τ_η_MC70000.txt", τ_η_MC[60001:70000], ',')
+writedlm("δ_MC70000.txt", δ_MC[60001:70000,:], ',')
+writedlm("ω_MC70000.txt", ω_MC[60001:70000,:], ',')
+writedlm("β_MC70000.txt", β_MC[60001:70000,:], ',')
+writedlm("α_MC70000.txt", α_MC[60001:70000], ',')
+writedlm("ρ_MC70000.txt", ρ_MC[60001:70000,:], ',')
+writedlm("ϕ_MC70000.txt", ϕ_MC[60001:70000,:], ',')
+writedlm("γ_MC70000.txt", γ_MC[60001:70000,:], ',')
 
 for cc in 1:num_cc
-    writedlm("$(cc)_ν_MClast.txt", ν_MC[80000][Country_List[cc]], ',')
+    writedlm("$(cc)_ν_MClast.txt", ν_MC[70000][Country_List[cc]], ',')
 end
 
-writedlm("ξ_MClast.txt", ξ_MC[80000,:,:], ',')
-writedlm("σ_ηξ_MC70000.txt", σ_ηξ_MC[60001:80000], ',')
-writedlm("η_MClast.txt", η_MC[80000,:,:], ',')
-#=
+writedlm("ξ_MClast.txt", ξ_MC[70000,:,:], ',')
+writedlm("σ_ηξ_MC70000.txt", σ_ηξ_MC[60001:70000], ',')
+writedlm("η_MClast.txt", η_MC[70000,:,:], ',')
+
 # 9.2.8 70001:80000
 # read previous iterations
 τ_η_MC[60001:70000] = readdlm("τ_η_MC70000.txt", ',')
@@ -4322,7 +4322,7 @@ end
 writedlm("ξ_MClast.txt", ξ_MC[80000,:,:], ',')
 writedlm("σ_ηξ_MC80000.txt", σ_ηξ_MC[70001:80000], ',')
 writedlm("η_MClast.txt", η_MC[80000,:,:], ',')
-=#
+
 
 
 # 9.2.9-10 80001:100000
@@ -4704,6 +4704,16 @@ end
 writedlm("ξ_MClast.txt", ξ_MC[100000,:,:], ',')
 writedlm("σ_ηξ_MC90000.txt", σ_ηξ_MC[80001:100000], ',')
 writedlm("η_MClast.txt", η_MC[100000,:,:], ',')
+
+
+
+
+
+
+
+
+
+
 
 
 ## alternatives
