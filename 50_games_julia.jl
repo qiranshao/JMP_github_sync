@@ -5086,7 +5086,7 @@ writedlm("η_MClast.txt", η_MC[100000,:,:], ',')
 
 
 # temp
-# 9.3 read results
+## 9.3 read results
 
 τ_η_MC[1:10000] = readdlm("τ_η_MC10000.txt", ',')
 δ_MC[1:10000,:] = readdlm("δ_MC10000.txt", ',')
@@ -5185,7 +5185,7 @@ writedlm("η_MClast.txt", η_MC[100000,:,:], ',')
 
 
 
-
+## 9.4 interpret results
 
 plot(σ_ηξ_MC[5000:10000])
 
@@ -5309,7 +5309,7 @@ end
 
 total_player_sample = sum(sum(length(m.partition_index[Country_List[cc]][key])  for key in collect(keys(m.partition_index[Country_List[cc]]))[1:n_par]) for cc in 1:num_cc)
 
-## 9.4.1 table for model fit
+## 9.5.1 table for model fit
 Country_List
 # games: 107410, 214950, 236430, 222880, 209170, 206420
 
