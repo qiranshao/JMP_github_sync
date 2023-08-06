@@ -503,7 +503,7 @@ end
 
 
 ## 4.4 compare g times a in full graph vs in subgraphs, if not much of difference, the partition does not affect likelihood estimator
-#=
+
 full_net_joint_play = zeros(num_cc)
 sub_net_joint_play = zeros(num_cc)
 full_net_link = zeros(num_cc)
@@ -519,11 +519,30 @@ for cc in 1:num_cc
     sub_net_link[cc] = sum(sum(A_friend[Country_List[cc]][partition[Country_List[cc]][key], partition[Country_List[cc]][key]]) for key in keys(partition[Country_List[cc]]))
 end
 
+bar(Country_List, full_net_link, label="full net", legend=:topright) 
+bar!(Country_List, sub_net_link, label= "sum over sub nets", legend=:topright) 
+xlabel!("country index")
+ylabel!("# of links")
+title!("# of links: full net vs summing over sub net")
+
+
+bar(Country_List, full_net_joint_play, label="full net", legend=:topright) 
+bar!(Country_List, sub_net_joint_play, label= "sum over sub nets", legend=:topright) 
+xlabel!("country index")
+ylabel!("sum(g_ij * a_ij)")
+title!("sum(g_ij * a_ij): full net vs summing over sub net")
+
+
+
+
 plot(full_net_joint_play)
 plot!(sub_net_joint_play)
 plot(full_net_link)
 plot!(sub_net_link)
-=#
+
+
+1- sum(sub_net_joint_play)/ sum(full_net_joint_play)
+
 ## 5 try the following parameter values as benchmark
 #=
 τ_η = 1.0
@@ -1163,6 +1182,7 @@ num_rc = 3 # 3 random coefficients  on multiplayer, age, price
 T = 100000 # num of outer MH iterations
 R = 2 # num of inner MH
 n_par = 20 # when simulating A_R, number of partition used
+k=4 
 ## 9.1 set up MCMC draws memory for each parameters
 τ_η_MC = zeros(T)
 δ_MC = zeros(T,2) # the coefficient in the price endogenity equation
@@ -2456,8 +2476,7 @@ writedlm("γ_MC$(now_end).txt", γ_MC[now_start:now_end,:], ',')
 for cc in 1:num_cc
     writedlm("$(cc)_ν_MClast.txt", ν_MC[now_end][Country_List[cc]], ',')
     # store average for counterfactual:
-    writedlm("$(cc)_ν_MC$(now_end)_avg.txt", mean(ν_MC[ns][Country_List[cc]] for ns in now_start:now_end), ',')
-    
+    writedlm("$(cc)_ν_MC$(now_end)_avg.txt", mean(ν_MC[ns][Country_List[cc]] for ns in now_start:now_end), ',')    
 end
 
 writedlm("ξ_MClast.txt", ξ_MC[now_end,:,:], ',')
@@ -5238,7 +5257,29 @@ writedlm("η_MC$(now_end)_avg.txt", mean(η_MC[ns,:,:] for ns in now_start:now_e
 
 
 ## 9.3 read results
+T = 100000 # num of outer MH iterations
+R = 2 # num of inner MH
+n_par = 20 # when simulating A_R, number of partition used
+k=4 
+num_rc = 3 
+τ_η_MC = zeros(T)
+δ_MC = zeros(T,2) # the coefficient in the price endogenity equation
 
+β_MC = zeros(T,k) # constant, multiplayer, rating,  age
+α_MC = zeros(T)
+ω_MC = zeros(T, k+1)
+
+ρ_MC = zeros(T,num_rc+1)  # representing variance term in ρ_ν, ρ_ξ
+ϕ_MC = zeros(T,2) # representing ϕ_s, ϕ_m
+γ_MC = zeros(T,num_rc+2) # constant, num_groups in common, plus number of random coefficient
+
+ν_MC = Dict{Int64,  Dict{String, Matrix{Float64}}}()
+ν_MC_tt =  Dict{String, Matrix{Float64}}()
+ξ_MC = zeros(T,num_cc, num_games)
+
+σ_ηξ_MC = zeros(T) # need to be constrained so that σ_ηξ^2 < τ_η
+
+η_MC = zeros(T, num_cc, num_games) # computed during MCMC
 τ_η_MC[1:10000] = readdlm("τ_η_MC10000.txt", ',')
 δ_MC[1:10000,:] = readdlm("δ_MC10000.txt", ',')
 ω_MC[1:10000,:] = readdlm("ω_MC10000.txt", ',')
@@ -5330,10 +5371,21 @@ writedlm("η_MC$(now_end)_avg.txt", mean(η_MC[ns,:,:] for ns in now_start:now_e
 γ_MC[90001:100000,:] = readdlm("γ_MC100000.txt", ',')
 
 
-## 9.4 interpret results
+## 9.4 store readable results
 
 #plot(σ_ηξ_MC[5000:10000])
-
+# beta constant
+plot(β_MC[1:100000,1])
+constant_full = zeros(8)
+constant_full[1] = mean(β_MC[20001:100000,1])
+constant_full[2] = std(β_MC[20001:100000,1])
+constant_full[3] = quantile(β_MC[20001:100000,1], 0.95)
+constant_full[4] = quantile(β_MC[20001:100000,1], 0.05)
+constant_full[5] = quantile(β_MC[20001:100000,1], 0.975)
+constant_full[6] = quantile(β_MC[20001:100000,1], 0.025)
+constant_full[7] = quantile(β_MC[20001:100000,1], 0.995)
+constant_full[8] = quantile(β_MC[20001:100000,1], 0.005)
+writedlm("constant_full.txt", constant_full, ',')
 # price
 plot(α_MC[1:100000])
 price_full = zeros(8)
@@ -5412,11 +5464,27 @@ net_mul_full[7] = quantile(ϕ_MC[20001:100000,2], 0.995)
 net_mul_full[8] = quantile(ϕ_MC[20001:100000,2], 0.005)
 writedlm("net_mul_full.txt", net_mul_full, ',')
 
-β_est = mean(β_MC[20001:100000,:], dims = 1)
-α_est = mean(α_MC[20001:100000,:])
+# rho
+rho_full = zeros(4)
+rho_full[:] = mean(ρ_MC[20001:100000,:], dims = 1)
+#rho_full[2,:] = std(ρ_MC[20001:100000,:], dims = 1)
+#rho_full[3,:] = quantile(ρ_MC[20001:100000,:], 0.95)
+#rho_full[4,:] = quantile(ρ_MC[20001:100000,:], 0.05)
+#rho_full[5,:] = quantile(ρ_MC[20001:100000,:], 0.975)
+#rho_full[6,:] = quantile(ρ_MC[20001:100000,:], 0.025)
+#rho_full[7,:] = quantile(ρ_MC[20001:100000,:], 0.995)
+#rho_full[8,:] = quantile(ρ_MC[20001:100000,:], 0.005)
+writedlm("rho_full.txt", rho_full, ',')
 
-ρ_est = mean(ρ_MC[20001:100000,:], dims = 1)
-ϕ_est = mean(ϕ_MC[20001:100000,:], dims = 1)
+
+
+
+#=
+#β_est = mean(β_MC[20001:100000,:], dims = 1)
+#α_est = mean(α_MC[20001:100000,:])
+
+#ρ_est = mean(ρ_MC[20001:100000,:], dims = 1)
+#ϕ_est = mean(ϕ_MC[20001:100000,:], dims = 1)
 
 ν = Dict{String, Matrix{Float64}}()
 for cc in 1:num_cc
@@ -5425,6 +5493,38 @@ for cc in 1:num_cc
 end
 ξ = readdlm("ξ_MClast.txt", ',')
 ξ .= 0.0
+=#
+
+# 9.5 read readable results
+constant_full = readdlm("constant_full.txt", ',') # beta entry 1
+is_mul_full = readdlm("is_mul_full.txt", ',') # beta entry 2
+rating_full = readdlm("rating_full.txt", ',') # beta entry 3
+age_full = readdlm("age_full.txt", ',') # beta entry 4
+
+β_est = [constant_full[1], is_mul_full[1], rating_full[1], age_full[1]]
+
+price_full = readdlm("price_full.txt", ',') # alpha
+α_est = price_full[1]
+
+net_sin_full = readdlm("net_sin_full.txt", ',') # phi_s
+net_mul_full = readdlm("net_mul_full.txt", ',') # phi_m
+ϕ_est = [net_sin_full[1], net_mul_full[1]]
+
+
+# rho nu and xi
+
+ρ_est = readdlm("rho_full.txt", ',')
+ν_est = Dict{String, Matrix{Float64}}()
+
+for cc in 1:num_cc
+    ν_est[Country_List[cc]] = readdlm("$(cc)_ν_MC30000_avg.txt", ',')
+end
+
+ξ_est = readdlm("ξ_MC30000_avg.txt", ',')
+
+
+
+# 9.6 model fit check
 
 R=10000
 game_benchmark = 1
@@ -5447,19 +5547,33 @@ A_R_model_obs = Dict{Int64, Matrix{Float64}}()
 @time for cc in 1:num_cc
     A_R_model_fit[cc] = zeros(50,1)
     A_R_model_obs[cc] = zeros(50,1)
-
+    country_sample_player = sum(length(m.partition_index[Country_List[cc]][key])  for key in collect(keys(m.partition_index[Country_List[cc]]))[1:n_par]) 
 
     #key = findmax(Dict(k => length(v) for (k,v) in partition[Country_List[cc]]))[2]
     for key in collect(keys(m.partition_index[Country_List[cc]]))[1:n_par]
-        println("country $cc, key $key") 
-        A_R_model_fit[cc] += 1/n_par * mean(MC_A_density(R,cc, key, m, β_est, α_est, ρ_est,  ν, ϕ_est, ξ, game_benchmark, rate)[1][5000:10000,:], dims = 1)' # * length(m.partition_index[Country_List[cc]][key]) 
-        A_R_model_obs[cc] += 1/n_par *  mean(m.game_play[Country_List[cc]][:, m.partition_index[Country_List[cc]][key]], dims =2)
+        println("country $cc, key $key")
+
+        A_R_model_fit[cc] += country_sample_player .* mean(MC_A_density(R,cc, key, m, β_est, α_est, ρ_est,  ν_est, ϕ_est, ξ_est, game_benchmark, rate)[1][(R-5000):R,:], dims = 1)' # * length(m.partition_index[Country_List[cc]][key]) 
+        A_R_model_obs[cc] += country_sample_player .* mean(m.game_play[Country_List[cc]][:, m.partition_index[Country_List[cc]][key]], dims =2)
         
     end
 end
 
 
 total_player_sample = sum(sum(length(m.partition_index[Country_List[cc]][key])  for key in collect(keys(m.partition_index[Country_List[cc]]))[1:n_par]) for cc in 1:num_cc)
+
+for cc in 1:num_cc
+    cc_player_sample = sum(length(m.partition_index[Country_List[cc]][key])  for key in collect(keys(m.partition_index[Country_List[cc]]))[1:n_par])
+    A_R_model_fit[cc] = A_R_model_fit[cc] ./cc_player_sample
+    A_R_model_obs[cc] = A_R_model_obs[cc] ./cc_player_sample
+end
+
+
+
+
+
+
+
 
 ## 9.5.1 table for model fit
 Country_List
@@ -5474,13 +5588,16 @@ market_share_obs = zeros(7)
 
 
 
-
+A_R_model_fit[1][50]
+A_R_model_obs[1][50]
 # 107410
 
+std(A_R_model_obs[8])
+std(A_R_model_fit[8])
+plot(A_R_model_obs[3])
+plot!(A_R_model_fit[3])
 
-
-
-
+cor(A_R_model_obs[3], A_R_model_fit[3])
 
 market_share_fit[1] = ((A_R_model_fit[1][1]
                         + A_R_model_fit[2][1]
@@ -5804,9 +5921,10 @@ sum(values(m.num_players))
 print(m.num_players)
 
 
+sum(A_R_model_fit[1].^2)
+sum(A_R_model_obs[1].^2)
 
-
-## 9.6 counterfactual: varying Arma 3 price (appid 107410)
+## 9.7 counterfactual-1: varying Arma 3 price (appid 107410)
 
 
 R=10000
@@ -5879,6 +5997,11 @@ market_share_fit[1] = ((A_R_model_fit[1][1]
                         + A_R_model_fit[10][1]
                         )/10#/total_player_sample #/ sum(values(m.num_players))
                         )
+
+
+# 9.8 counterfactual-2 popular-player promotion
+
+
 
 
 ## 10 different version for no net, matching BLP
