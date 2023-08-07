@@ -5547,20 +5547,19 @@ A_R_model_obs = Dict{Int64, Matrix{Float64}}()
 @time for cc in 1:num_cc
     A_R_model_fit[cc] = zeros(50,1)
     A_R_model_obs[cc] = zeros(50,1)
-    country_sample_player = sum(length(m.partition_index[Country_List[cc]][key])  for key in collect(keys(m.partition_index[Country_List[cc]]))[1:n_par]) 
-
     #key = findmax(Dict(k => length(v) for (k,v) in partition[Country_List[cc]]))[2]
     for key in collect(keys(m.partition_index[Country_List[cc]]))[1:n_par]
         println("country $cc, key $key")
-
-        A_R_model_fit[cc] += country_sample_player .* mean(MC_A_density(R,cc, key, m, β_est, α_est, ρ_est,  ν_est, ϕ_est, ξ_est, game_benchmark, rate)[1][(R-5000):R,:], dims = 1)' # * length(m.partition_index[Country_List[cc]][key]) 
-        A_R_model_obs[cc] += country_sample_player .* mean(m.game_play[Country_List[cc]][:, m.partition_index[Country_List[cc]][key]], dims =2)
+        cc_key_players =  length(m.partition_index[Country_List[cc]][key])
+        A_R_model_fit[cc] += cc_key_players .* mean(MC_A_density(R,cc, key, m, β_est, α_est, ρ_est,  ν_est, ϕ_est, ξ_est, game_benchmark, rate)[1][(R-5000):R,:], dims = 1)' # * length(m.partition_index[Country_List[cc]][key]) 
+        A_R_model_obs[cc] += cc_key_players .* mean(m.game_play[Country_List[cc]][:, m.partition_index[Country_List[cc]][key]], dims =2)
         
     end
 end
 
+A_R_model_fit[2] ./96
 
-total_player_sample = sum(sum(length(m.partition_index[Country_List[cc]][key])  for key in collect(keys(m.partition_index[Country_List[cc]]))[1:n_par]) for cc in 1:num_cc)
+#total_player_sample = sum(sum(length(m.partition_index[Country_List[cc]][key])  for key in collect(keys(m.partition_index[Country_List[cc]]))[1:n_par]) for cc in 1:num_cc)
 
 for cc in 1:num_cc
     cc_player_sample = sum(length(m.partition_index[Country_List[cc]][key])  for key in collect(keys(m.partition_index[Country_List[cc]]))[1:n_par])
@@ -5584,7 +5583,7 @@ market_share_fit = zeros(7)
 market_share_obs = zeros(7)
 
 
-
+Country_List
 
 
 
@@ -5594,9 +5593,12 @@ A_R_model_obs[1][50]
 
 std(A_R_model_obs[8])
 std(A_R_model_fit[8])
-plot(A_R_model_obs[3])
-plot!(A_R_model_fit[3])
+plot(A_R_model_obs[2])
+plot!(A_R_model_fit[2])
+bar(1:50, A_R_model_obs[2])
+A_R_model_obs[2] \ 1:50
 
+bar!(1:50, A_R_model_fit[2])
 cor(A_R_model_obs[3], A_R_model_fit[3])
 
 market_share_fit[1] = ((A_R_model_fit[1][1]
